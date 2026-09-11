@@ -3,13 +3,13 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Chat } from "./components/Chat/Chat";
 import { Controls } from "./components/Controls/Controls";
 import styles from "./App.module.css";
+import { Assistant } from "./assistants/googleai";
+import { OpenAIAssistant } from "./assistants/openai";
 
-const googleai = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_AI_API_KEY);
-console.log("Google Generative AI initialized:", googleai, import.meta.env.VITE_GOOGLE_AI_API_KEY);
-const gemini = googleai.getGenerativeModel({ model: "gemini-3.6-flash" })
-const chat = gemini.startChat({ history: [] });
 
 function App() {
+  const assistant = new Assistant();
+  const openaiAssistant = new OpenAIAssistant();
   const [messages, setMessages] = useState([]);
 
   function addMessage(message) {
@@ -19,8 +19,8 @@ function App() {
   async function handleContentSend(content) {
     addMessage({ content, role: "user" });
     try {
-      const result = await chat.sendMessage(content);
-      addMessage({ content: result.response.text(), role: "assistant" });
+      const result = await openaiAssistant.chat(content, messages);
+      addMessage({ content: result, role: "assistant" });
     } catch (error) {
       addMessage({
         content: "Sorry, I couldn't process your request. Please try again!",
