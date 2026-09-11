@@ -11,10 +11,13 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "install": "^0.13.0",
+    "npm": "^11.19.1",
     "openai": "^7.15.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-markdown": "^10.1.0"
+    "react-markdown": "^10.1.0",
+    "react-textarea-autosize": "^8.5.9"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
