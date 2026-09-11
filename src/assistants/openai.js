@@ -7,8 +7,6 @@ if (!apiKey) {
   console.error("Vite Warning: VITE_OPEN_AI_API_KEY is not defined in environment variables!");
 }
 
-console.log("Loaded OpenAI API Key:", apiKey ? "Yes" : "No", apiKey);
-
 const openai = new OpenAI({
   apiKey: import.meta.env.VITE_OPEN_AI_API_KEY?.trim(),
   baseURL: 'http://localhost:5173/openai-api', // Triggers the clean proxy rewrite rule
