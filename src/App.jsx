@@ -3,7 +3,7 @@ import { Loader } from "./components/Loader/Loader";
 import { Chat } from "./components/Chat/Chat";
 import { Controls } from "./components/Controls/Controls";
 import styles from "./App.module.css";
-import { Assistant } from "./assistants/deepseekai";
+import { Assistant } from "./assistants/googleai";
 // import { OpenAIAssistant } from "./assistants/openai";
 
 

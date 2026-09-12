@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.24.1",
+    "@google/genai": "^2.22.0",
     "install": "^0.13.0",
     "npm": "^11.19.1",
     "openai": "^7.15.0",
