@@ -5,6 +5,7 @@ import { Chat } from "./components/Chat/Chat";
 import { Controls } from "./components/Controls/Controls";
 import { Assistant } from "./components/Assistant/Assistant";
 import styles from "./App.module.css";
+import { Theme } from "./components/Theme/Theme";
 
 let assistant;
 
@@ -79,7 +80,10 @@ function App() {
         isDisabled={isLoading || isStreaming}
         onSend={handleContentSend}
       />
-      <Assistant onAssistantChange={handleAssistantChange} />
+      <div className={styles.Configuration}>
+        <Assistant onAssistantChange={handleAssistantChange} />
+        <Theme />
+      </div>
     </div>
   );
 }

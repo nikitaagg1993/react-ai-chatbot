@@ -5,25 +5,34 @@
     gap: 16px;
     height: 100vh;
     padding: 16px;
-  }
-  
-  .Header {
+}
+
+.Header {
     text-align: center;
-  }
-  
-  .Logo {
+}
+
+.Logo {
     width: 64px;
     height: 64px;
-  }
-  
-  .Title {
+}
+
+.Title {
     margin: 0;
-  }
-  
-  .ChatContainer {
+}
+
+.ChatContainer {
     flex-grow: 1;
     width: 100%;
     background: light-dark(#ffffff, #212121);
     border-radius: 16px;
     overflow-y: auto;
-  }
+}
+
+.Configuration {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    opacity: 0.8;
+}
