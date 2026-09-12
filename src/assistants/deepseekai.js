@@ -7,8 +7,6 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-console.log("DeepSeek AI API Key:", import.meta.env.VITE_DEEPSEEK_AI_API_KEY);
-
 export class Assistant extends OpenAIAssistant {
   constructor(model = "deepseek-flash", client = openai) {
     super(model, client);

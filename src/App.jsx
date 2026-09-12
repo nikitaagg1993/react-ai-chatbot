@@ -1,16 +1,16 @@
 import { useState } from "react";
+import { Assistant as AssistantClass } from "./assistants/anthropicai";
 import { Loader } from "./components/Loader/Loader";
 import { Chat } from "./components/Chat/Chat";
 import { Controls } from "./components/Controls/Controls";
+import { Assistant } from "./components/Assistant/Assistant";
 import styles from "./App.module.css";
-import { Assistant } from "./assistants/anthropicai";
+
+let assistant;
 
 function App() {
-  const assistant = new Assistant();
-
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
   const [isStreaming, setIsStreaming] = useState(false);
 
   function updateLastMessageContent(content) {
@@ -35,8 +35,8 @@ function App() {
         content,
         messages.filter(({ role }) => role !== "system")
       );
-      let isFirstChunk = false;
 
+      let isFirstChunk = false;
       for await (const chunk of result) {
         if (!isFirstChunk) {
           isFirstChunk = true;
@@ -50,22 +50,24 @@ function App() {
 
       setIsStreaming(false);
     } catch (error) {
-      console.log("Error while processing the request:", error);
       addMessage({
         content:
           error?.message ??
           "Sorry, I couldn't process your request. Please try again!",
         role: "system",
       });
-    } finally {
       setIsLoading(false);
       setIsStreaming(false);
     }
   }
 
+  function handleAssistantChange(newAssistant) {
+    assistant = newAssistant;
+  }
+
   return (
     <div className={styles.App}>
-       {isLoading && <Loader />}
+      {isLoading && <Loader />}
       <header className={styles.Header}>
         <img className={styles.Logo} src="/chat-bot.png" />
         <h2 className={styles.Title}>AI Chatbot</h2>
@@ -77,6 +79,7 @@ function App() {
         isDisabled={isLoading || isStreaming}
         onSend={handleContentSend}
       />
+      <Assistant onAssistantChange={handleAssistantChange} />
     </div>
   );
 }
