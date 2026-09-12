@@ -12,6 +12,10 @@
     padding: 0 16px;
     border-radius: 16px;
     font-size: 14px;
+
+    &[data-role="system"] {
+        background: light-dark(#f9dbdb, #6d3030);
+      }
   
     &[data-role="user"] {
       align-self: flex-end;
