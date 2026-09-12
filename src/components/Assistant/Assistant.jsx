@@ -15,31 +15,52 @@ const assistantMap = {
 };
 
 export function Assistant({ onAssistantChange }) {
-  const [value, setValue] = useState("googleai");
+  const [value, setValue] = useState("googleai:gemini-3.6-flash");
 
   function handleValueChange(event) {
     setValue(event.target.value);
   }
 
   useEffect(() => {
-    const AssistantClass = assistantMap[value];
+    const [assistant, model] = value.split(":");
+    const AssistantClass = assistantMap[assistant];
 
     if (!AssistantClass) {
-      throw new Error(`Unknown assistant: ${value}`);
+      throw new Error(`Unknown assistant: ${assistant} or model: ${model}`);
     }
 
-    onAssistantChange(new AssistantClass());
+    onAssistantChange(new AssistantClass(model));
   }, [value]);
 
   return (
     <div className={styles.Assistant}>
       <span>Assistant:</span>
       <select defaultValue={value} onChange={handleValueChange}>
-        <option value="googleai">Google AI</option>
-        <option value="openai">OpenAI</option>
-        <option value="deepseekai">DeepSeek AI</option>
-        <option value="anthropicai">Anthropic AI</option>
-        <option value="xai">X AI</option>
+      <optgroup label="Google AI">
+          <option value="googleai:gemini-3.6-flash">Gemini 3.6 Flash</option>
+          <option value="googleai:gemini-3.6-flash-lite">
+            Gemini 3.6 Flash-Lite
+          </option>
+        </optgroup>
+
+        <optgroup label="Open AI">
+          <option value="openai:gpt-4o-mini">GPT-4o mini</option>
+          <option value="openai:chatgpt-4o-latest">ChatGPT-4o</option>
+        </optgroup>
+
+        <optgroup label="DeepSeek AI">
+          <option value="deepseekai:deepseek-chat">DeepSeek-V3</option>
+        </optgroup>
+
+        <optgroup label="Anthropic AI">
+          <option value="anthropicai:claude-3-5-haiku-latest">
+            Claude 3.5 Haiku
+          </option>
+        </optgroup>
+
+        <optgroup label="X AI">
+          <option value="xai:grok-3-mini-latest">Grok 3 Mini</option>
+        </optgroup>
       </select>
     </div>
   );
