@@ -3,8 +3,8 @@ import { Loader } from "./components/Loader/Loader";
 import { Chat } from "./components/Chat/Chat";
 import { Controls } from "./components/Controls/Controls";
 import styles from "./App.module.css";
-import { Assistant } from "./assistants/googleai";
-import { OpenAIAssistant } from "./assistants/openai";
+import { Assistant } from "./assistants/deepseekai";
+// import { OpenAIAssistant } from "./assistants/openai";
 
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
     addMessage({ content, role: "user" });
     setIsLoading(true);
     try {
-      const result = await assistant.chatStream(content);
+      const result = await assistant.chatStream(content, messages);
       let isFirstChunk = false;
 
       for await (const chunk of result) {
@@ -49,6 +49,7 @@ function App() {
 
       setIsStreaming(false);
     } catch (error) {
+      console.log("Error while processing the request:", error);
       addMessage({
         content: "Sorry, I couldn't process your request. Please try again!",
         role: "system",
