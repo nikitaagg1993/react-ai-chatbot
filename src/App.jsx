@@ -3,7 +3,7 @@ import { Loader } from "./components/Loader/Loader";
 import { Chat } from "./components/Chat/Chat";
 import { Controls } from "./components/Controls/Controls";
 import styles from "./App.module.css";
-import { Assistant } from "./assistants/googleai";
+import { Assistant } from "./assistants/anthropicai";
 
 function App() {
   const assistant = new Assistant();

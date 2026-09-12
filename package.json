@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.125.0",
     "@google/genai": "^2.22.0",
     "install": "^0.13.0",
     "npm": "^11.19.1",
