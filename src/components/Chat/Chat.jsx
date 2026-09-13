@@ -6,6 +6,7 @@ import styles from "./Chat.module.css";
 
 export function Chat({
     assistant,
+    isActive = false,
     chatId,
     chatMessages,
     onChatMessagesUpdate,
@@ -23,7 +24,7 @@ export function Chat({
     }, [chatId]);
 
     useEffect(() => {
-        onChatMessagesUpdate(messages);
+        onChatMessagesUpdate(chatId, messages);
     }, [messages]);
 
     function updateLastMessageContent(content) {
@@ -73,6 +74,8 @@ export function Chat({
             setIsStreaming(false);
         }
     }
+
+    if (!isActive) return null;
 
     return (
         <>
