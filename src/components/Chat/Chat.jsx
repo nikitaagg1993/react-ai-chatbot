@@ -1,49 +1,74 @@
-import Markdown from "react-markdown";
+import { useState } from "react";
+import { Loader } from "../Loader/Loader";
+import { Messages } from "../Messages/Messages";
+import { Controls } from "../Controls/Controls";
 import styles from "./Chat.module.css";
-import { useRef, useEffect, useMemo } from "react";
 
-const WELCOME_MESSAGE_GROUP = [
-    {
-        role: "assistant",
-        content: "Hello! How can I assist you right now?",
-    },
-];
+export function Chat({ assistant }) {
+  const [messages, setMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
 
-export function Chat({ messages }) {
-    const messagesEndRef = useRef(null);
-    const messagesGroups = useMemo(
-        () =>
-            messages.reduce((groups, message) => {
-                if (message.role === "user") groups.push([]);
-                groups[groups.length - 1].push(message);
-                return groups;
-            }, []),
-        [messages]
+  function updateLastMessageContent(content) {
+    setMessages((prevMessages) =>
+      prevMessages.map((message, index) =>
+        index === prevMessages.length - 1
+          ? { ...message, content: `${message.content}${content}` }
+          : message
+      )
     );
+  }
 
-    useEffect(() => {
-        const lastMessage = messages[messages.length - 1];
+  function addMessage(message) {
+    setMessages((prevMessages) => [...prevMessages, message]);
+  }
 
-        if (lastMessage?.role === "user") {
-            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-        } messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
-    return (
-        <div className={styles.Chat}>
-            {[WELCOME_MESSAGE_GROUP, ...messagesGroups].map(
-                (messages, groupIndex) => (
-                    // Group
-                    <div key={groupIndex} className={styles.Group}>
-                        {messages.map(({ role, content }, index) => (
-                            // Message
-                            <div key={index} className={styles.Message} data-role={role}>
-                                <Markdown>{content}</Markdown>
-                            </div>
-                        ))}
-                    </div>
-                )
-            )}
-            <div ref={messagesEndRef} />
-        </div>
-    );
+  async function handleContentSend(content) {
+    addMessage({ content, role: "user" });
+    setIsLoading(true);
+    try {
+      const result = await assistant.chatStream(
+        content,
+        messages.filter(({ role }) => role !== "system")
+      );
+
+      let isFirstChunk = false;
+      for await (const chunk of result) {
+        if (!isFirstChunk) {
+          isFirstChunk = true;
+          addMessage({ content: "", role: "assistant" });
+          setIsLoading(false);
+          setIsStreaming(true);
+        }
+
+        updateLastMessageContent(chunk);
+      }
+
+      setIsStreaming(false);
+    } catch (error) {
+      addMessage({
+        content:
+          error?.message ??
+          "Sorry, I couldn't process your request. Please try again!",
+        role: "system",
+      });
+      setIsLoading(false);
+      setIsStreaming(false);
+    }
+  }
+
+  return (
+    <>
+      {isLoading && <Loader />}
+
+      <div className={styles.Chat}>
+        <Messages messages={messages} />
+      </div>
+
+      <Controls
+        isDisabled={isLoading || isStreaming}
+        onSend={handleContentSend}
+      />
+    </>
+  );
 }
