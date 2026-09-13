@@ -4,6 +4,7 @@ import styles from "./Sidebar.module.css";
 export function Sidebar({
     chats,
     activeChatId,
+    activeChatMessages,
     onActiveChatIdChange,
     onNewChatCreate,
 }) {
@@ -38,23 +39,29 @@ export function Sidebar({
             </button>
 
             <div className={styles.Sidebar} data-open={isOpen}>
-                <button className={styles.NewChatButton} onClick={onNewChatCreate}>
+                <button
+                    className={styles.NewChatButton}
+                    disabled={activeChatMessages.length === 0}
+                    onClick={onNewChatCreate}
+                >
                     New Chat
                 </button>
 
                 <ul className={styles.Chats}>
-                    {chats.map((chat) => (
-                        <li
-                            key={chat.id}
-                            className={styles.Chat}
-                            data-active={chat.id === activeChatId}
-                            onClick={() => handleChatClick(chat.id)}
-                        >
-                            <button className={styles.ChatButton}>
-                                <div className={styles.ChatTitle}>{chat.title}</div>
-                            </button>
-                        </li>
-                    ))}
+                    {chats
+                        .filter(({ messages }) => messages.length > 0)
+                        .map((chat) => (
+                            <li
+                                key={chat.id}
+                                className={styles.Chat}
+                                data-active={chat.id === activeChatId}
+                                onClick={() => handleChatClick(chat.id)}
+                            >
+                                <button className={styles.ChatButton}>
+                                    <div className={styles.ChatTitle}>{chat.title}</div>
+                                </button>
+                            </li>
+                        ))}
                 </ul>
             </div>
 
